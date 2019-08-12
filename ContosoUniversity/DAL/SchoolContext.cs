@@ -16,5 +16,5 @@ namespace ContosoUniversity.DAL
         public DbSet<Course> Courses { get; set; }
 
      
-    }
+    } 
 }
