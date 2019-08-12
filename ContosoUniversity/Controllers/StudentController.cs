@@ -113,11 +113,15 @@ namespace ContosoUniversity.Controllers
         }
 
         // GET: Student/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? id,bool? saveChangesError=false)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            if(saveChangesError.GetValueOrDefault())
+            {
+                ViewBag.ErrorMessage = "Delete Failed";
             }
             Student student = db.Students.Find(id);
             if (student == null)
@@ -132,10 +136,18 @@ namespace ContosoUniversity.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Student student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
+            try
+            {
+                Student student = db.Students.Find(id);
+                db.Students.Remove(student);
+                db.SaveChanges();
+            }
+            catch (DataException)
+            {
+                return RedirectToAction("Delete",new {id=id,saveChangesError=true });
+            }
             return RedirectToAction("Index");
+
         }
 
         protected override void Dispose(bool disposing)
