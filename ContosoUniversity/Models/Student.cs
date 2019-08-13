@@ -7,7 +7,9 @@ namespace ContosoUniversity.Models
     public class Student
     {
         public int ID { get; set; }
+        [StringLength(50)]
         public string LastName { get; set; }
+        [StringLength(50,ErrorMessage ="First name no more than 50 letters")]
         public string FirstMidName { get; set; }
 
         [DataType(DataType.Date)]
